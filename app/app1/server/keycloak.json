@@ -1,0 +1,8 @@
+{
+  "clientId": "test-app",
+  "realm": "test-realm",
+  "realmPublicKey": "M56LRr5vCDI9HXNS6SA9IKpQ7HVdIIlJ",
+  "bearer-only": false,
+  "auth-server-url": "https://keycloak-dev.as.swisstxt.ch",
+  "ssl-required": "external"
+}

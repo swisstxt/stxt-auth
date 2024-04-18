@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  app1:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - KEYCLOAK_URL=http://keycloak-server:8080
+      - KEYCLOAK_REALM=myrealm
+      - KEYCLOAK_CLIENT_ID=myapp
+      - SESSION_SECRET=secret1
+      - PORT=3000
+
+  app2:
+    build: .
+    ports:
+      - "3001:3000"
+    environment:
+      - KEYCLOAK_URL=http://keycloak-server:8080
+      - KEYCLOAK_REALM=myrealm
+      - KEYCLOAK_CLIENT_ID=myapp
+      - SESSION_SECRET=secret2
+      - PORT=3000
+
+  app1-server:
+    build:
+      context: ./app1/server
+    environment:
+      - KEYCLOAK_REALM=realm-one
+      - KEYCLOAK_AUTH_SERVER_URL=http://keycloak:8080/auth
+    ports:
+      - "3002:3000"
+
+  app1-client:
+    build:
+      context: ./app1/client
+    ports:
+      - "3102:3000"
+    depends_on:
+      - app1-server
