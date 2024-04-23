@@ -1,9 +1,11 @@
 import * as dotenv from 'dotenv';
 import session from 'express-session';
 import Keycloak from 'keycloak-connect';
+import express from 'express';
+import cors from 'cors';
 
-const express = require('express');
 const app = express();
+app.use(cors());
 dotenv.config();
 // Session configuration
 let memoryStore = new session.MemoryStore();

@@ -1,41 +1,51 @@
 version: '3.8'
 
 services:
-  app1:
-    build: .
+  app1_client:
+    build: ./app1/client
     ports:
-      - "3000:3000"
-    environment:
-      - KEYCLOAK_URL=http://keycloak-server:8080
-      - KEYCLOAK_REALM=myrealm
-      - KEYCLOAK_CLIENT_ID=myapp
-      - SESSION_SECRET=secret1
-      - PORT=3000
+      - "3001:80"
+    depends_on:
+      - app1_server
 
-  app2:
-    build: .
-    ports:
-      - "3001:3000"
-    environment:
-      - KEYCLOAK_URL=http://keycloak-server:8080
-      - KEYCLOAK_REALM=myrealm
-      - KEYCLOAK_CLIENT_ID=myapp
-      - SESSION_SECRET=secret2
-      - PORT=3000
-
-  app1-server:
-    build:
-      context: ./app1/server
-    environment:
-      - KEYCLOAK_REALM=realm-one
-      - KEYCLOAK_AUTH_SERVER_URL=http://keycloak:8080/auth
+  app1_server:
+    build: ./app1/server
     ports:
       - "3002:3000"
 
-  app1-client:
-    build:
-      context: ./app1/client
+#  app2_client:
+#    build: ./app2/client
+#    ports:
+#      - "3003:80"
+#    depends_on:
+#      - app2_server
+#
+#  app2_server:
+#    build: ./app2/server
+#    ports:
+#      - "3004:3000"
+
+  login_client:
+    build: ./login/client
     ports:
-      - "3102:3000"
-    depends_on:
-      - app1-server
+      - "3005:80"
+#    depends_on:
+#      - login_server
+
+#  login_server:
+#    build: ./login/server
+#    ports:
+#      - "3006:3000"
+
+#  keycloak:
+#    image: jboss/keycloak
+#    environment:
+#      - KEYCLOAK_USER=admin
+#      - KEYCLOAK_PASSWORD=admin
+#    ports:
+#      - "8080:8080"
+
+networks:
+  default:
+    external:
+      name: loginapp-network
