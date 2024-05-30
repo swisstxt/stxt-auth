@@ -1,51 +1,64 @@
 version: '3.8'
 
 services:
+  traefik:
+    networks:
+      - proxy
+    image: traefik:v2.5
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./traefik.yml:/etc/traefik/traefik.yml"
+
   app1_client:
+    networks:
+      - proxy
     build: ./app1/client
-    ports:
-      - "3001:80"
-    depends_on:
-      - app1_server
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app1.rule=Host(`app1.local`)"
+      - "traefik.http.routers.app1.entrypoints=web"
+      - "traefik.http.services.app1.loadbalancer.server.port=80"
 
-  app1_server:
-    build: ./app1/server
-    ports:
-      - "3002:3000"
 
-#  app2_client:
-#    build: ./app2/client
-#    ports:
-#      - "3003:80"
-#    depends_on:
-#      - app2_server
-#
-#  app2_server:
-#    build: ./app2/server
-#    ports:
-#      - "3004:3000"
+  app2_client:
+    networks:
+      - proxy
+    build: ./app2/client
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app2.rule=Host(`app2.local`)"
+      - "traefik.http.routers.app2.entrypoints=web"
+      - "traefik.http.services.app2.loadbalancer.server.port=80"
 
   login_client:
+    networks:
+      - proxy
     build: ./login/client
-    ports:
-      - "3005:80"
-#    depends_on:
-#      - login_server
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.login.rule=Host(`login.local`)"
+      - "traefik.http.routers.login.entrypoints=web"
+      - "traefik.http.services.login.loadbalancer.server.port=80"
 
 #  login_server:
 #    build: ./login/server
 #    ports:
-#      - "3006:3000"
-
-#  keycloak:
-#    image: jboss/keycloak
-#    environment:
-#      - KEYCLOAK_USER=admin
-#      - KEYCLOAK_PASSWORD=admin
-#    ports:
-#      - "8080:8080"
+#      - "3006:3000"  # change if needed
+#    labels:
+#      - "traefik.enable=true"
+#      - "traefik.http.routers.login-server.rule=Host(`api.login.local`)"
+#      - "traefik.http.services.login-server.loadbalancer.server.port=3000"
 
 networks:
+  proxy:
+    external: true
   default:
     external:
       name: loginapp-network
