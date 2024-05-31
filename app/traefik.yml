@@ -5,10 +5,13 @@ api:
 entryPoints:
   web:
     address: ":80"
-  websecure:
-    address: ":443"
   traefik:
     address: ":8080"
+
+log:
+  filePath: "log-file.log"
+  format: json
+  level: DEBUG
 
 providers:
   docker:

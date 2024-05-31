@@ -15,46 +15,66 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "./traefik.yml:/etc/traefik/traefik.yml"
-
   app1_client:
     networks:
       - proxy
     build: ./app1/client
+    volumes:
+      - ./app1/client/src:/app/src
+      - ./app1/client/public:/app/public
+      - ./app1/client/package.json:/app/package.json
+      - ./app1/client/package-lock.json:/app/package-lock.json
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - FAST_REFRESH=true
+      - WDS_SOCKET_PORT=3000 # The mapped port
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.app1.rule=Host(`app1.local`)"
       - "traefik.http.routers.app1.entrypoints=web"
-      - "traefik.http.services.app1.loadbalancer.server.port=80"
-
-
+      - "traefik.http.services.app1.loadbalancer.server.port=3000"
   app2_client:
     networks:
       - proxy
     build: ./app2/client
+    volumes:
+      - ./app2/client/src:/app/src
+      - ./app2/client/public:/app/public
+      - ./app2/client/package.json:/app/package.json
+      - ./app2/client/package-lock.json:/app/package-lock.json
+      - /app/node_modules
+    ports:
+      - "3002:3000"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.app2.rule=Host(`app2.local`)"
       - "traefik.http.routers.app2.entrypoints=web"
-      - "traefik.http.services.app2.loadbalancer.server.port=80"
-
+      - "traefik.http.services.app2.loadbalancer.server.port=3000"
   login_client:
     networks:
       - proxy
     build: ./login/client
+    volumes:
+      - ./login/client/src:/app/src
+      - ./login/client/public:/app/public
+      - ./login/client/package.json:/app/package.json
+      - ./login/client/package-lock.json:/app/package-lock.json
+      - /app/node_modules
+    ports:
+      - "3003:3000"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.login.rule=Host(`login.local`)"
       - "traefik.http.routers.login.entrypoints=web"
-      - "traefik.http.services.login.loadbalancer.server.port=80"
-
-#  login_server:
-#    build: ./login/server
-#    ports:
-#      - "3006:3000"  # change if needed
-#    labels:
-#      - "traefik.enable=true"
-#      - "traefik.http.routers.login-server.rule=Host(`api.login.local`)"
-#      - "traefik.http.services.login-server.loadbalancer.server.port=3000"
+      - "traefik.http.services.login.loadbalancer.server.port=3000"
 
 networks:
   proxy:
