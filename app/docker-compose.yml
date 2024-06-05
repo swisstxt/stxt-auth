@@ -37,6 +37,23 @@ services:
       - "traefik.http.routers.app1.rule=Host(`app1.local`)"
       - "traefik.http.routers.app1.entrypoints=web"
       - "traefik.http.services.app1.loadbalancer.server.port=3000"
+  app1_server:
+    networks:
+      - proxy
+    build: ./app1/server
+    volumes:
+      - ./app1/server/src:/app/src
+      - ./app1/server/package.json:/app/package.json
+      - ./app1/server/package-lock.json:/app/package-lock.json
+    ports:
+      - "3001:3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app1-server.rule=Host(`api.app1.local`)"
+      - "traefik.http.routers.app1-server.entrypoints=web"
+      - "traefik.http.services.app1-server.loadbalancer.server.port=3000"
+    environment:
+      - NODE_ENV=development
   app2_client:
     networks:
       - proxy
@@ -51,11 +68,31 @@ services:
       - "3002:3000"
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - FAST_REFRESH=true
+      - WDS_SOCKET_PORT=3000 # The mapped port
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.app2.rule=Host(`app2.local`)"
       - "traefik.http.routers.app2.entrypoints=web"
       - "traefik.http.services.app2.loadbalancer.server.port=3000"
+  app2_server:
+    networks:
+      - proxy
+    build: ./app2/server
+    volumes:
+      - ./app2/server/src:/app/src
+      - ./app2/server/package.json:/app/package.json
+      - ./app2/server/package-lock.json:/app/package-lock.json
+    ports:
+      - "3004:3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app2-server.rule=Host(`api.app2.local`)"
+      - "traefik.http.routers.app2-server.entrypoints=web"
+      - "traefik.http.services.app2-server.loadbalancer.server.port=3000"
+    environment:
+      - NODE_ENV=development
   login_client:
     networks:
       - proxy
@@ -70,12 +107,31 @@ services:
       - "3003:3000"
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - FAST_REFRESH=true
+      - WDS_SOCKET_PORT=3000 # The mapped port
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.login.rule=Host(`login.local`)"
       - "traefik.http.routers.login.entrypoints=web"
       - "traefik.http.services.login.loadbalancer.server.port=3000"
-
+  login_server:
+    networks:
+      - proxy
+    build: ./login/server
+    volumes:
+      - ./login/server/src:/app/src
+      - ./login/server/package.json:/app/package.json
+      - ./login/server/package-lock.json:/app/package-lock.json
+    ports:
+      - "3005:3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.login-server.rule=Host(`api.login.local`)"
+      - "traefik.http.routers.login-server.entrypoints=web"
+      - "traefik.http.services.login-server.loadbalancer.server.port=3000"
+    environment:
+      - NODE_ENV=development
 networks:
   proxy:
     external: true
