@@ -1,0 +1,16 @@
+http:
+  middlewares:
+    cors:
+      compress: {}
+      headers:
+        accessControlAllowOrigin: "*"
+        accessControlAllowMethods:
+          - GET
+          - OPTIONS
+          - PUT
+          - POST
+          - DELETE
+        accessControlAllowHeaders:
+          - Content-Type
+          - Authorization
+        addVaryHeader: true

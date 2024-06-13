@@ -9,12 +9,18 @@ services:
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--entrypoints.web.address=:80"
+      - "--providers.file.filename=/etc/traefik/traefik.yml"
     ports:
       - "80:80"
       - "8080:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
       - "./traefik.yml:/etc/traefik/traefik.yml"
+    labels:
+      - "traefik.http.middlewares.cors.headers.accessControlAllowOrigin=*"
+      - "traefik.http.middlewares.cors.headers.accessControlAllowMethods=GET,OPTIONS,PUT,POST,DELETE"
+      - "traefik.http.middlewares.cors.headers.accessControlAllowHeaders=Content-Type,Authorization"
+      #- "traefik.http.middlewares.cors.headers.addVaryHeader=true"
   app1_client:
     networks:
       - proxy
@@ -37,6 +43,7 @@ services:
       - "traefik.http.routers.app1.rule=Host(`app1.local`)"
       - "traefik.http.routers.app1.entrypoints=web"
       - "traefik.http.services.app1.loadbalancer.server.port=3000"
+      #- "traefik.http.routers.app1.middlewares=cors@docker"
   app1_server:
     networks:
       - proxy
@@ -45,6 +52,7 @@ services:
       - ./app1/server/src:/app/src
       - ./app1/server/package.json:/app/package.json
       - ./app1/server/package-lock.json:/app/package-lock.json
+      - /app/node_modules
     ports:
       - "3001:3000"
     labels:
@@ -76,6 +84,7 @@ services:
       - "traefik.http.routers.app2.rule=Host(`app2.local`)"
       - "traefik.http.routers.app2.entrypoints=web"
       - "traefik.http.services.app2.loadbalancer.server.port=3000"
+      #- "traefik.http.routers.app2.middlewares=cors@docker"
   app2_server:
     networks:
       - proxy
@@ -91,6 +100,7 @@ services:
       - "traefik.http.routers.app2-server.rule=Host(`api.app2.local`)"
       - "traefik.http.routers.app2-server.entrypoints=web"
       - "traefik.http.services.app2-server.loadbalancer.server.port=3000"
+      #- "traefik.http.routers.app2-server.middlewares=cors@docker"
     environment:
       - NODE_ENV=development
   login_client:
@@ -115,6 +125,7 @@ services:
       - "traefik.http.routers.login.rule=Host(`login.local`)"
       - "traefik.http.routers.login.entrypoints=web"
       - "traefik.http.services.login.loadbalancer.server.port=3000"
+      #- "traefik.http.routers.login.middlewares=cors@docker"
   login_server:
     networks:
       - proxy
@@ -130,8 +141,10 @@ services:
       - "traefik.http.routers.login-server.rule=Host(`api.login.local`)"
       - "traefik.http.routers.login-server.entrypoints=web"
       - "traefik.http.services.login-server.loadbalancer.server.port=3000"
+      #- "traefik.http.routers.login-server.middlewares=cors@docker"
     environment:
       - NODE_ENV=development
+
 networks:
   proxy:
     external: true

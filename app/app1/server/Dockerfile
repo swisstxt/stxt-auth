@@ -6,4 +6,4 @@ COPY package*.json ./
 RUN npm config set strict-ssl false && npm install
 COPY . .
 EXPOSE 3000
-CMD [ "node", "src/app.js"]
+CMD ["npx", "nodemon", "src/app.js"]

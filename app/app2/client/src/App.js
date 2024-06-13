@@ -1,42 +1,70 @@
-import React, { useEffect, useState } from 'react';
-import './App.css';
-import Keycloak from 'keycloak-js';
+import React, {useEffect, useState} from 'react';
+import { useKeycloak } from '@react-keycloak/web';
 
-function App() {
-  const [message, setMessage] = useState('');
-  const [status, setStatus] = useState('');
+const App = () => {
+    const { keycloak, initialized } = useKeycloak();
+    const [isAuthorized, setIsAuthorized] = useState(false);
 
-    const keycloakConfig = { // REPLACE with the clientID for the app2!!
-        url: 'https://keycloak-dev.as.swisstxt.ch/auth',
-        realm: 'test-realm',
-        clientId: 'test-app'
-    };
+    useEffect(() => {
+        console.log('Keycloak initialized:', initialized);
+        if (initialized) {
+            if (!keycloak.authenticated) {
+                console.log('User is not authenticated, redirecting to login...');
+                keycloak.login();
+            } else {
+                console.log('User is authenticated');
+                const { groups, azp } = keycloak.tokenParsed;
 
-    const keycloak = new Keycloak(keycloakConfig);
-
-    keycloak.init({ onLoad: 'login-required' }).then((authenticated) => {
-        if (authenticated) {
-            setStatus("You're welcome");
-        } else {
-            setStatus("You shall not pass!");
+                const authorized = groups.some(group => group.includes(azp));
+                setIsAuthorized(authorized);
+            }
         }
-    });
+    }, [keycloak, initialized]);
 
-  useEffect(() => {
-    fetch('http://app2.local:3002/healthcheck')
-        .then(response => response.json())
-        .then(data => setMessage(data.message))
-        .catch(err => console.error("Geht nicht. Err:", err));
-  }, []);
+    if (!initialized) {
+        return <div>Initializing Keycloak...</div>;
+    }
 
-  return (
-      <div className="App">
-        <header className="App-header">
-          <p>{message || "React app von app2"}</p>
-          <p>{status || "No status message"}</p>
-        </header>
-      </div>
-  );
-}
+    if (!keycloak.authenticated) {
+        return <div>Redirecting to login...</div>;
+    }
+
+    console.log("keycloak.tokenParsed ", keycloak.tokenParsed.groups);
+
+    return (
+        <div>
+            <div>
+                {isAuthorized ? (
+                    <>
+                        <h1>Welcome to App2</h1>
+                        <p>You are logged in as {keycloak.tokenParsed.preferred_username}</p>
+                    </>
+                ) : (
+                    <img src={`${process.env.PUBLIC_URL}/you_shall_not_pass.jpg`} alt="You shall not pass!"/>
+                )}
+            </div>
+            <p>You have access to the following groups: {JSON.stringify(keycloak.tokenParsed.groups)}</p>
+            {!keycloak.authenticated && (
+                <button
+                    type="button"
+                    className="text-blue-800"
+                    onClick={() => keycloak.login()}
+                >
+                    Login
+                </button>
+            )}
+
+            {!!keycloak.authenticated && (
+                <button
+                    type="button"
+                    className="text-blue-800"
+                    onClick={() => keycloak.logout()}
+                >
+                    Logout ({keycloak.tokenParsed.preferred_username})
+                </button>
+            )}
+        </div>
+    );
+};
 
 export default App;

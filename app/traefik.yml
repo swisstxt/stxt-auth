@@ -13,6 +13,21 @@ log:
   format: json
   level: DEBUG
 
+http:
+  middlewares:
+    cors:
+      headers:
+        accessControlAllowOrigin: "*"
+        accessControlAllowMethods:
+          - GET
+          - OPTIONS
+          - PUT
+          - POST
+          - DELETE
+        accessControlAllowHeaders:
+          - Content-Type
+          - Authorization
+        addVaryHeader: true
 providers:
   docker:
     exposedByDefault: false
@@ -25,3 +40,4 @@ certificatesResolvers:
       storage: acme.json
       httpChallenge:
         entryPoint: web
+

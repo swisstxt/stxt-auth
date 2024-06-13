@@ -1,5 +1,5 @@
 {
-  "clientId": "test-app",
+  "clientId": "app2",
   "realm": "test-realm",
   "realmPublicKey": "M56LRr5vCDI9HXNS6SA9IKpQ7HVdIIlJ",
   "bearer-only": false,
