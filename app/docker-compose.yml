@@ -30,7 +30,9 @@ services:
       - ./app1/client/public:/app/public
       - ./app1/client/package.json:/app/package.json
       - ./app1/client/package-lock.json:/app/package-lock.json
+      - ./shared:/app/shared
       - /app/node_modules
+      - /app/node_modules/shared:/app/node_modules/shared
     ports:
       - "3000:3000"
     environment:
