@@ -2,7 +2,10 @@
 
 ## Purpose
 
-Identify which technologies we can use for the entry point of all our internal applications.
+Identify which technologies we can use for the entry point of all our internal applications. In this example a user logs into one application once, and can then navigate to other applications without having to re-enter their credentials each time, provided they have the necessary access rights.
+
+The underlying technology is called `Silent SSO`.
+The iframe located in `%appname%/client/public/silent-check-sso.html` performs a silent Single Sign-On (SSO) check in Keycloak. It works by loading an invisible iframe with this HTML, which retrieves the current URL and posts it to the parent window using postMessage. The parent window receives the authentication status or tokens from the iframe without user interaction, ensuring a seamless and secure authentication check.
 
 ## Keycloak Instance
 
