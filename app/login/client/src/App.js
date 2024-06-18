@@ -1,15 +1,16 @@
+import React from 'react';
 import './App.css';
 
-
-function App() {
-
-  return (
-      <div className="App">
-        <a href="https://app1.example1.com/secure">App 1</a>
-        <a href="https://app2.example2.com/secure">App 2</a>
-        <a href="https://app3.example3.com/secure">App 3</a>
-      </div>
-  );
-}
+const App = () => {
+    return (
+        <div className="app">
+            <h2>There is not so much choice:</h2>
+            <ul className="app_links">
+                <li><a href="http://app1.local">App1</a></li>
+                <li><a href="http://app2.local">App2</a></li>
+            </ul>
+        </div>
+    );
+};
 
 export default App;
