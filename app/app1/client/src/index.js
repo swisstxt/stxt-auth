@@ -2,7 +2,7 @@ import React from 'react';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import keycloak from './keycloak';
-import App from 'shared/App';
+import App from './App';
 import {createRoot} from "react-dom/client";
 
 const root = createRoot(document.getElementById("root"));
