@@ -42,13 +42,16 @@ docker-compose up --build -d
 ```
 ### Access the entry point
 - **URL**: http://login.local
-- **Login**: Use one of the accounts set up in the `test-realm` in Keycloak
+- **Default login**: Use one of the accounts set up in the `test-realm` in Keycloak
+- **Login with your corporate account**: Click "AD Connection" under the login form and follow the typical login flow.
+
 
 ## Additional information
 - Make sure you have Docker and Docker Compose installed on your machine.
 - Ensure that the `proxy` network is created only once; subsequent runs of the application do not require recreating the network.
 - If you encounter issues with cookies, double-check the browser settings and make sure third-party cookies are allowed.
 
-## Current issues on 18.06.2024 (delete it later)
-The package `shared` has to be linked to the `app1/client` and `app1/client` and imported to `index.js` in both applications.
+## Current issues on 01.07.2024 (delete it later)
+ - The package `shared` has to be linked to the `app1/client` and `app1/client` and imported to `index.js` in both applications.
 Using `npm link` via command line doesn't help because this must be implemented in the docker setup.
+- A user from Active Directory in the realm is not visible until they log in for the first time. This means that it's impossible to assign the user to a specific group in advance. Initially, they see that access is denied, and only after they attempt to log in once can they be granted access to a specific group. In theory, a custom script could be written to import users using the Azure AD API and Keycloak Admin API, but I haven't explored this topic in detail.
