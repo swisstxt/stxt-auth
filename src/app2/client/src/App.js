@@ -18,7 +18,7 @@ const App = ({ app }) => {
 
                 const apps = groups.map(group => {
                     const appName = group.replace('/', '').split('-')[0];
-                    return { name: appName, url: `http://${appName}.local/` };
+                    return { name: appName, url: `https://${appName}.stxt-auth.localhost/` };
                 });
                 setLinks(apps);
             }

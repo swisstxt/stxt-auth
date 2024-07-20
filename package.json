@@ -1,0 +1,12 @@
+{
+  "name": "keycloak-with-socket-factory",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "setup": "sh ./setup/setup.sh"
+  },
+  "author": "",
+  "license": "ISC"
+}

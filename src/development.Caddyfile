@@ -1,0 +1,11 @@
+app1.stxt-auth.localhost {
+    reverse_proxy app1_client:3000
+}
+
+app2.stxt-auth.localhost {
+    reverse_proxy app2_client:3000
+}
+
+login.stxt-auth.localhost {
+    reverse_proxy login_client:3000
+}
