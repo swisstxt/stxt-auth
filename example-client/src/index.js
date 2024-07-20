@@ -6,6 +6,7 @@ import App from './App';
 import {createRoot} from "react-dom/client";
 
 const root = createRoot(document.getElementById("root"));
+
 root.render(
     <ReactKeycloakProvider
         authClient={keycloak}
@@ -13,7 +14,7 @@ root.render(
     >
         <Router>
             <Routes>
-                <Route path="/" element={<App app="App1"/>} />
+                <Route path="/" element={<App app={process.env.REACT_APP_NAME} />} />
             </Routes>
         </Router>
     </ReactKeycloakProvider>
