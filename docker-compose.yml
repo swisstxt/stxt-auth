@@ -5,10 +5,8 @@ services:
       - "443:443"
     command: caddy run --watch --adapter caddyfile --config /etc/caddy/Caddyfile
     volumes:
-      - ./src/development.Caddyfile:/etc/caddy/Caddyfile
+      - ./development.Caddyfile:/etc/caddy/Caddyfile
       - ./caddy_data:/data # For storing Caddy's root CA certificate in a persistent manner
-    depends_on:
-      - app1_client
     networks:
       stxtauth:
         # We need to hardcode a static IP here to be referenced by other containers as a DNS server

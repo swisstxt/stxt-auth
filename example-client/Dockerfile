@@ -1,22 +1,13 @@
-FROM node:20
+FROM node:iron-alpine3.19
 
 WORKDIR /app
 
-COPY package.json package-lock.json* ./
+COPY package*.json ./
 
-RUN npm install --silent
+RUN npm install
 
 COPY . .
 
+EXPOSE 3000
 # Build the React app for production
-RUN npm run build
-
-# Use a lightweight web server to serve the built app
-FROM nginx:stable-alpine
-COPY --from=0 /app/build /usr/share/nginx/html
-
-# Expose the port that Nginx will run on
-EXPOSE 80
-
-# Start Nginx server
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "run", "start"]
