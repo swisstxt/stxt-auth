@@ -1,6 +1,6 @@
 services:
   entrypoint:
-    image: caddy:2.7.5-alpine
+    image: caddy:2.8.4-alpine
     ports:
       - "443:443"
     command: caddy run --watch --adapter caddyfile --config /etc/caddy/Caddyfile

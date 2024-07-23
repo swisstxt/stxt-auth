@@ -26,8 +26,8 @@ The iframe located in `%appname%/client/public/silent-check-sso.html` performs a
 3. Select `Allow all cookies` or `Allow third-party cookies`
 
 ### Run the setup
-2. Run caddy `caddy run`
-3. Run the setup script `run npm setup`
+1. Run caddy `caddy run`
+2. Run the setup script `npm run setup`
 
 ###  Run the containers:
 ```
@@ -42,4 +42,4 @@ docker-compose up --build -d
 ## Current issues on 01.07.2024 (delete it later)
 - The package `shared` has to be linked to the `app1/client` and `app1/client` and imported to `index.js` in both applications.
   Using `npm link` via command line doesn't help because this must be implemented in the docker setup.
-- A user from Active Directory in the realm is not visible until they log in for the first time. This means that it's impossible to assign the user to a specific group in advance. Initially, they see that access is denied, and only after they attempt to log in once can they be granted access to a specific group. In theory, a custom script could be written to import users using the Azure AD API and Keycloak Admin API, but I haven't explored this topic in detail.# keycloak-with-socket-factory
+- A user from Active Directory in the realm is not visible until they log in for the first time. This means that it's impossible to assign the user to a specific group in advance. Initially, they see that access is denied, and only after they attempt to log in once can they be granted access to a specific group. In theory, a custom script could be written to import users using the Azure AD API and Keycloak Admin API, but I haven't explored this topic in detail.
