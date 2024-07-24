@@ -1,4 +1,4 @@
-FROM node:iron-alpine3.19
+FROM node:20-alpine3.19
 
 WORKDIR /app
 
@@ -9,5 +9,5 @@ RUN npm install
 COPY . .
 
 EXPOSE 3000
-# Build the React app for production
+# Run the app in development
 CMD ["npm", "run", "start"]
