@@ -1,0 +1,11 @@
+{
+	# Expose Caddy's Admin API on all interfaces so it can be accessed
+	# by the docker host, then restrict access to exactly the docker host
+	# via the "origins" restriction.
+	#
+	# This is used to allow scripts to trust the CA caddy creates within
+	# the docker compose stack for local development.
+	admin 0.0.0.0:2019 {
+		origins host.docker.internal
+	}
+}
