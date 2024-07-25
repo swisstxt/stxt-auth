@@ -5,10 +5,8 @@ services:
       - "443:443"
     command: caddy run --watch --adapter caddyfile --config /etc/caddy/Caddyfile
     volumes:
-      - ./src/development.Caddyfile:/etc/caddy/Caddyfile
+      - ./development.Caddyfile:/etc/caddy/Caddyfile
       - ./caddy_data:/data # For storing Caddy's root CA certificate in a persistent manner
-    depends_on:
-      - app1_client
     networks:
       stxtauth:
         # We need to hardcode a static IP here to be referenced by other containers as a DNS server
@@ -17,47 +15,31 @@ services:
   app1_client:
     networks:
       - stxtauth
-    build: src/app1/client
+    build: example-client
     volumes:
-      - ./src/app1/client/src:/app/src
-      - ./src/app1/client/public:/app/public
-      - ./src/app1/client/package.json:/app/package.json
-      - ./src/app1/client/package-lock.json:/app/package-lock.json
-      - ./src/shared:/app/shared
-      - ./src/app1/client/node_modules/shared:/app/node_modules/shared
+      - ./example-client/src:/app/src
+      - ./example-client/public:/app/public
     environment:
+      - REACT_APP_NAME="Application 1"
+      - REACT_APP_KEYCLOAK_ID=app1
+      - REACT_APP_KEYCLOAK_REALM=test-realm
+      - REACT_APP_KEYCLOAK_URL=https://keycloak-dev.as.swisstxt.ch
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
       - FAST_REFRESH=true
       - WDS_SOCKET_PORT=3000
-#  app1_server:
-#    networks:
-#      - proxy
-#    build: ./app1/server
-#    volumes:
-#      - ./app1/server/src:/app/src
-#      - ./app1/server/package.json:/app/package.json
-#      - ./app1/server/package-lock.json:/app/package-lock.json
-#      - /app/node_modules
-#    ports:
-#      - "3001:3000"
-#    labels:
-#      - "traefik.enable=true"
-#      - "traefik.http.routers.app1-server.rule=Host(`api.app1.local`)"
-#      - "traefik.http.routers.app1-server.entrypoints=web"
-#      - "traefik.http.services.app1-server.loadbalancer.server.port=3000"
-#    environment:
-#      - NODE_ENV=development
   app2_client:
     networks:
       - stxtauth
-    build: src/app2/client
+    build: example-client
     volumes:
-      - ./src/app2/client/src:/app/src
-      - ./src/app2/client/public:/app/public
-      - ./src/app2/client/package.json:/app/package.json
-      - ./src/app2/client/package-lock.json:/app/package-lock.json
+      - ./example-client/src:/app/src
+      - ./example-client/public:/app/public
     environment:
+      - REACT_APP_NAME="Application 2"
+      - REACT_APP_KEYCLOAK_ID=app2
+      - REACT_APP_KEYCLOAK_REALM=test-realm
+      - REACT_APP_KEYCLOAK_URL=https://keycloak-dev.as.swisstxt.ch
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
       - FAST_REFRESH=true

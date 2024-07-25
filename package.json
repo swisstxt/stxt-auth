@@ -4,9 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "setup": "sh ./setup/setup.sh"
+    "setup": "sh ./setup/setup.sh",
+    "start:client1": "npm --prefix example-client start",
+    "build:client1": "npm --prefix example-client run build"
   },
+  "workspaces": [
+    "example-client"
+  ],
   "author": "",
   "license": "ISC"
 }
