@@ -1,10 +1,8 @@
-version: "3.8"
-
 services:
   setup:
     image: caddy:2.7.5-alpine
     ports:
-      - "2019:2019" # Caddy Admin API - only necessary for initially trusting its CA certificate.
+      - "127.0.0.1:2019:2019" # Caddy Admin API - only necessary for initially trusting its CA certificate.
     command: caddy run --watch --adapter caddyfile --config /etc/caddy/Caddyfile
     volumes:
       - ./setup/setup.Caddyfile:/etc/caddy/Caddyfile
