@@ -26,8 +26,8 @@ The iframe located in `%appname%/client/public/silent-check-sso.html` performs a
 3. Select `Allow all cookies` or `Allow third-party cookies`
 
 ### Run the setup
-2. Run caddy `caddy run`
-3. Run the setup script `run npm setup`
+1. Run caddy `caddy run`
+2. Run the setup script `npm run setup`
 
 ###  Run the containers:
 ```
