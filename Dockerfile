@@ -10,13 +10,13 @@ ENV KC_DB_DIALECT=org.hibernate.dialect.PostgreSQL10Dialect
 ENV KC_DB_DRIVER=org.postgresql.Driver
 RUN /opt/keycloak/bin/kc.sh build --transaction-xa-enabled=false --cache-stack=kubernetes --db=postgres
 
-
 FROM base
 COPY --from=builder --chown=1000:0 /opt/keycloak/lib/quarkus/ /opt/keycloak/lib/quarkus/
 ENV KC_METRICS_ENABLED=true
 ENV KC_DB_KIND=postgres
 ENV KC_DB_DIALECT=org.hibernate.dialect.PostgreSQL10Dialect
 ENV KC_DB_DRIVER=org.postgresql.Driver
+ENV KC_FEATURES=script
 
 USER 1000
 EXPOSE 8080 8443
