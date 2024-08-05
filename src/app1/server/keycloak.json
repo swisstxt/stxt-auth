@@ -1,0 +1,11 @@
+{
+  "clientId": "app1",
+  "realm": "test-realm",
+  "realmPublicKey": "FvSaabG8TaIjfP0wSQapqrWsC8M0hFCSVlO_Xb_Zv3M",
+  "bearer-only": false,
+  "auth-server-url": "https://keycloak-dev.as.swisstxt.ch",
+  "ssl-required": "external",
+  "enable-cors": true,
+  "redirectUris": ["http://app1.local/*"],
+  "webOrigins": ["*"]
+}

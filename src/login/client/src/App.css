@@ -1,0 +1,40 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Open Sans", "Arial", "Helvetica Neue", Helvetica, serif;
+  background-color: #fafafa;
+  color: #333;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.app_links {
+  list-style-type: none;
+  padding: 0;
+}
+
+.app_links li {
+  line-height: 42px;
+  margin-bottom: 20px;
+}
+
+.app_links a {
+  margin-right: 15px;
+  padding: 10px 20px;
+  text-decoration: none;
+  font-size: 16px;
+  color: #fff;
+  background-color: #C90900;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.app a:hover {
+  text-decoration: none;
+  background-color: #000;
+}

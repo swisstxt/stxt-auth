@@ -1,0 +1,68 @@
+services:
+  entrypoint:
+    image: caddy:2.8.4-alpine
+    ports:
+      - "443:443"
+    command: caddy run --watch --adapter caddyfile --config /etc/caddy/Caddyfile
+    volumes:
+      - ./development.Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy_data:/data # For storing Caddy's root CA certificate in a persistent manner
+    networks:
+      stxtauth:
+        # We need to hardcode a static IP here to be referenced by other containers as a DNS server
+        # to be able to internally resolve the same hostnames as externally (e.g. https://login.stxt-auth.localhost)
+        ipv4_address: "192.168.45.251"
+  app1_client:
+    networks:
+      - stxtauth
+    build: example-client
+    volumes:
+      - ./example-client/src:/app/src
+      - ./example-client/public:/app/public
+    environment:
+      - REACT_APP_NAME="Application 1"
+      - REACT_APP_KEYCLOAK_ID=app1
+      - REACT_APP_KEYCLOAK_REALM=test-realm
+      - REACT_APP_KEYCLOAK_URL=https://keycloak-dev.as.swisstxt.ch
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - FAST_REFRESH=true
+      - WDS_SOCKET_PORT=3000
+  app2_client:
+    networks:
+      - stxtauth
+    build: example-client
+    volumes:
+      - ./example-client/src:/app/src
+      - ./example-client/public:/app/public
+    environment:
+      - REACT_APP_NAME="Application 2"
+      - REACT_APP_KEYCLOAK_ID=app2
+      - REACT_APP_KEYCLOAK_REALM=test-realm
+      - REACT_APP_KEYCLOAK_URL=https://keycloak-dev.as.swisstxt.ch
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - FAST_REFRESH=true
+      - WDS_SOCKET_PORT=3000
+  login_client:
+    networks:
+      - stxtauth
+    build: src/login/client
+    volumes:
+      - ./src/login/client/src:/app/src
+      - ./src/login/client/public:/app/public
+      - ./src/login/client/package.json:/app/package.json
+      - ./src/login/client/package-lock.json:/app/package-lock.json
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - FAST_REFRESH=true
+      - WDS_SOCKET_PORT=3000
+
+networks:
+  stxtauth:
+    name: stxt-auth-network-default
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "192.168.45.0/24"
